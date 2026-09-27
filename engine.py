@@ -47,3 +47,22 @@ def stream_logs(file_path: str):
           except json.JSONDecodeError:
               print(f"■ [SKIPPED] Found a broken log line: {cleaned_line}")
               continue
+
+# STAGE-3
+class ManagedLogsStreamer:
+
+    def __init__(self,file_path:str)->None:
+        self.file_path=file_path
+        self.file_handle=None
+
+    def __enter__(self):
+        # Allocating system handle:
+        self.file_handle=open(self.file_path,"r",encoding="utf-8")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+       # releasing resource file handle cleanly
+       if self.file_handle:
+           self.file_handle.close()
+
+       return False
