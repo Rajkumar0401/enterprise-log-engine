@@ -37,8 +37,8 @@ class LogEntry:
 
 @profile_performance
 def stream_logs(file_path: str):
-       with open(file_path, 'r', encoding='utf-8') as file:
-        for line in file:
+       with ManagedLogsStreamer(file_path) as streamer:
+        for line in streamer.file_handle:
          cleaned_line = line.strip()
          if cleaned_line:
           try:
