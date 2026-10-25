@@ -4,7 +4,7 @@ import json
 import time
 import argparse
 
-
+#STAGE 1 and STAGE 2
 class LogPipelineError(Exception): 
     """Base Exception Class"""
     pass
