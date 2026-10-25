@@ -69,7 +69,22 @@ class ManagedLogsStreamer:
        return False
 
 #STAGE-4
-    
+
+def non_negative_int(value: str) -> int:
+    try:
+        number = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "Latency must be an integer"
+        ) from error
+
+    if number < 0:
+        raise argparse.ArgumentTypeError(
+            "Latency cannot be negative"
+        )
+
+    return number
+  
 def setup_cli():
     parser = argparse.ArgumentParser(
         description="Stream and filter production logs"
@@ -89,7 +104,7 @@ def setup_cli():
 
     parser.add_argument(
         "--latency",
-        type=int,
+        type=non_negative_int,
         default=0,
         help="Minimum response time in milliseconds"
     )
