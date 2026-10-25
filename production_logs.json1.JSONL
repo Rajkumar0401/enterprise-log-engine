@@ -1,0 +1,6 @@
+
+{"timestamp":"10:00","level":"ERROR","service":"API","response_time":650,"message":"Request failed"}
+{"timestamp":"10:01","level":"INFO","service":"API","response_time":800,"message":"Request completed"}
+{"timestamp":"10:02","level":"ERROR","service":"DB","response_time":200,"message":"Database warning"}
+{"timestamp":"10:03","level":"WARNING","service":"AUTH","response_time":700,"message":"Slow authentication"}
+

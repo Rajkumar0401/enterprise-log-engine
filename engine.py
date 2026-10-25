@@ -2,6 +2,7 @@
 
 import json
 import time
+import argparse
 from functools import wraps
 from typing import Callable, Any
 
@@ -66,3 +67,58 @@ class ManagedLogsStreamer:
            self.file_handle.close()
 
        return False
+
+#STAGE-4
+    
+def setup_cli():
+    parser = argparse.ArgumentParser(
+        description="Stream and filter production logs"
+    )
+
+    parser.add_argument(
+        "--file",
+        required=True,
+        help="Path to the JSON log file"
+    )
+
+    parser.add_argument(
+        "--level",
+        default=None,
+        help="Filter by log level, such as ERROR"
+    )
+
+    parser.add_argument(
+        "--latency",
+        type=int,
+        default=0,
+        help="Minimum response time in milliseconds"
+    )
+
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = setup_cli()
+
+    # Filter criteria from the command-line arguments
+    runtime_conditions = lambda log: (
+        (args.level is None or log.level == args.level)
+        and (log.response_time >= args.latency)
+    )
+
+    try:
+        for log in stream_logs(args.file):
+            if runtime_conditions(log):
+                print(
+                    f"{log.timestamp} | "
+                    f"{log.level} | "
+                    f"{log.service} | "
+                    f"{log.response_time} ms | "
+                    f"{log.message}"
+                )
+
+    except FileNotFoundError:
+        print(f"Error: File not found: {args.file}")
+
+    except Exception as error:
+        print(f"Error processing logs: {error}")
